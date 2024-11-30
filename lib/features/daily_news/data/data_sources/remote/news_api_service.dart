@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -7,7 +6,7 @@ import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 import '../../../../../core/constants.dart';
-import '../../models/article.dart';
+import '../../models/api_response_model.dart';
 
 part 'news_api_service.g.dart';
 
@@ -26,7 +25,7 @@ abstract class NewsApiService {
   }
 
   @GET('/top-headlines')
-  Future<HttpResponse<List<ArticleModel>>> getNewsArticles({
+  Future<HttpResponse<ApiResponseModel>> getNewsArticles({
     @Query("apiKey") String? apiKey,
     @Query("country") String? country,
     @Query("category") String? category,

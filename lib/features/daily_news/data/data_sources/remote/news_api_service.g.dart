@@ -24,7 +24,7 @@ class _NewsApiService implements NewsApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<List<ArticleModel>>> getNewsArticles({
+  Future<HttpResponse<ApiResponseModel>> getNewsArticles({
     String? apiKey,
     String? country,
     String? category,
@@ -38,7 +38,7 @@ class _NewsApiService implements NewsApiService {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<List<ArticleModel>>>(Options(
+    final _options = _setStreamType<HttpResponse<ApiResponseModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -55,26 +55,9 @@ class _NewsApiService implements NewsApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    log(_result.data.toString());
-
-    late List<ArticleModel> _value;
+    late ApiResponseModel _value;
     try {
-      final articlesList = _result.data!['articles'];
-      log("articlesList - ${articlesList.toString()}");
-      //////////////////////////////////////////////
-
-      final articles = articlesList.map((articleJson) {
-        return ArticleModel.fromJson(articleJson);
-      }).toList();
-
-      log("articlesList2 - ${articles.toString()}");
-
-      _value = articlesList.map((dynamic i) {
-        return ArticleModel.fromJson(i as Map<String, dynamic>);
-      }).toList();
-      /////////////////////////////////////////////////////////////////
-      log(_value.toString());
-      // _value = _result.data!['articles'].map((dynamic i) => ArticleModel.fromJson(i as Map<String, dynamic>)).toList();
+      _value = ApiResponseModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -84,7 +67,9 @@ class _NewsApiService implements NewsApiService {
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
-    if (T != dynamic && !(requestOptions.responseType == ResponseType.bytes || requestOptions.responseType == ResponseType.stream)) {
+    if (T != dynamic &&
+        !(requestOptions.responseType == ResponseType.bytes ||
+            requestOptions.responseType == ResponseType.stream)) {
       if (T == String) {
         requestOptions.responseType = ResponseType.plain;
       } else {

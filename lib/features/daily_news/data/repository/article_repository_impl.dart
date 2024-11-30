@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:news_app_clean/core/constants.dart';
 import 'package:news_app_clean/core/resources/data_state.dart';
-import 'package:news_app_clean/featuers/daily_news/data/data_sources/remote/news_api_service.dart';
-import 'package:news_app_clean/featuers/daily_news/domain/repository/article_repository.dart';
+import 'package:news_app_clean/features/daily_news/data/data_sources/remote/news_api_service.dart';
+import 'package:news_app_clean/features/daily_news/domain/repository/article_repository.dart';
 
-import '../models/article.dart';
+import '../models/api_response_model.dart';
 
 class ArticleRepositoryImpl implements ArticleRepository {
   final NewsApiService _newsApiService;
 
   ArticleRepositoryImpl(this._newsApiService);
   @override
-  Future<DataState<List<ArticleModel>>> getNewsArticles() async {
+  Future<DataState<ApiResponseModel>> getNewsArticles() async {
     try {
       final httpResponse = await _newsApiService.getNewsArticles(
         apiKey: newsAPIKey,
