@@ -35,9 +35,7 @@ class DailyNews extends StatelessWidget {
         return ListView.builder(
             itemCount: state.response?.articles.length,
             itemBuilder: (context, index) {
-              return ArticleWidget(
-                article: state.response?.articles[index],
-              );
+              return ArticleWidget(article: state.response?.articles[index]);
             });
       }
       return const SizedBox();
@@ -67,12 +65,15 @@ class ArticleWidget extends StatelessWidget {
       imageUrl: article!.urlToImage,
       imageBuilder: (context, imageProvider) => Padding(
         padding: const EdgeInsetsDirectional.only(end: 14),
-        child: Container(
-          width: MediaQuery.of(context).size.width / 3,
-          height: double.maxFinite,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.08),
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 3,
+            height: double.maxFinite,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.08),
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
           ),
         ),
       ),
